@@ -1,4 +1,5 @@
 import numpy as np
+import datetime as dt
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -40,9 +41,9 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/<start><br/>"
-        f"/api/v1.0/<start>/<end><br/>"
-        "input start and end date as yyyy-mm-dd"
+        f"/api/v1.0/start<br/>"
+        f"/api/v1.0/start/end<br/>"
+        f"input start and end date as yyyy-mm-dd"
     )
 
 
