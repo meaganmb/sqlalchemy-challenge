@@ -47,7 +47,7 @@ def welcome():
 
 
 @app.route("/api/v1.0/precipitation")
-def names():
+def precipitation():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
@@ -65,7 +65,7 @@ def names():
 
 
 @app.route("/api/v1.0/stations")
-def passengers():
+def station():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
@@ -80,7 +80,7 @@ def passengers():
     return jsonify(station_list)
 
 @app.route("/api/v1.0/tobs")
-def passengers():
+def tobs():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
@@ -97,6 +97,44 @@ def passengers():
     most_active = list(np.ravel(result))
 
     return jsonify(most_active)
+
+
+@app.route("/api/v1.0/<start>")
+def date(start):
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    # Query
+    result = session.query(func.min(Measurement.tobs),
+            func.max(Measurement.tobs),
+            func.avg(Measurement.tobs)).\
+            filter(Measurement.date >= start).all()
+
+    session.close()
+
+    # Convert list of tuples into normal list
+    start_json = list(np.ravel(result))
+
+    return jsonify(start_json)
+
+@app.route("/api/v1.0/<start>/<end>")
+def start_end_date(start, end):
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    # Query
+    result = session.query(func.min(Measurement.tobs),
+            func.max(Measurement.tobs),
+            func.avg(Measurement.tobs)).\
+            filter(Measurement.date >= start).\
+            filter(end >= Measurement.date).all()
+
+    session.close()
+
+    # Convert list of tuples into normal list
+    start_end_json = list(np.ravel(result))
+
+    return jsonify(start_end_json)
 
 
 if __name__ == '__main__':
