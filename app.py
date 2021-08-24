@@ -51,9 +51,9 @@ def names():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
+    # Query
     year_ago = dt.date(2017, 8 ,23) - dt.timedelta(days=365)
 
-    # Query
     results = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date >= year_ago).all()
 
     session.close()
@@ -75,9 +75,28 @@ def passengers():
     session.close()
 
     # Convert list of tuples into normal list
-    station_list = list(np.ravel(results))
+    station_list = list(np.ravel(result))
 
     return jsonify(station_list)
+
+@app.route("/api/v1.0/tobs")
+def passengers():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    # Query
+    year_ago = dt.date(2017, 8 ,18) - dt.timedelta(days=365)
+    
+    result = session.query(Measurement.date, Measurement.tobs).\
+                    filter(Measurement.date >= year_ago).\
+                    filter(Measurement.station == "USC00519281").all()
+
+    session.close()
+
+    # Convert list of tuples into normal list
+    most_active = list(np.ravel(result))
+
+    return jsonify(most_active)
 
 
 if __name__ == '__main__':
